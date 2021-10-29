@@ -11,8 +11,6 @@ total_sum = 0
 pairs = {}
 
 for simbol in res.json():
-    if "USD-SWAP" in simbol["instrument_id"]:
-        continue
     kind = kind + 1
     url = "https://okex.com/api/swap/v3/instruments/" + simbol["instrument_id"] + "/historical_funding_rate"
     #print(url)
@@ -22,9 +20,10 @@ for simbol in res.json():
     for i in res.json():
         times = times + 1
         sum += float(i["funding_rate"])
-    print(simbol["instrument_id"], ":", round(sum, 3), int(times/3), "day", "AverageProfit:", round(sum/(times/3), 5))
-    pairs[simbol["instrument_id"]] = round(sum/(times/3), 5)
-    total_sum = total_sum + sum/(times/3)
+    if times != 0:
+        print(simbol["instrument_id"], ":", round(sum, 3), int(times/3), "day", "AverageProfit:", round(sum/(times/3), 5))
+        pairs[simbol["instrument_id"]] = round(sum/(times/3), 5)
+        total_sum = total_sum + sum/(times/3)
     #time.sleep(1)
 
 aver = total_sum/kind
